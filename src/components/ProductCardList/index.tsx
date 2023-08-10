@@ -6,9 +6,8 @@ interface Props {
   productList: ProductResponseDTO[];
 }
 
-const ProductCardList = (props: Props) => {
-  const productList = props.productList;
-
+const ProductCardList = ({ productList }: Props) => {
+  const imgFolder = "src/img/";
   const [quantityList, setQuantityList] = useState([0]);
   const [, setState] = useState(false);
 
@@ -18,6 +17,8 @@ const ProductCardList = (props: Props) => {
     setQuantityList(aux);
     setState((prev) => !prev);
   };
+
+  const onClickAddProduct = () => {};
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -36,13 +37,21 @@ const ProductCardList = (props: Props) => {
       <Row xs={1} sm={1} md={2} lg={3} xl={4} className="g-4">
         {productList.map((product, index) => (
           <Col>
-            <Card>
+            <Card style={{ height: 360 }}>
               <Carousel>
-                {product.pictureList.map((picture) => (
-                  <Carousel.Item style={{ height: 200 }}>
-                    <Image src={picture} width={1000} fluid />
-                  </Carousel.Item>
-                ))}
+                <Carousel.Item style={{ height: 200 }}>
+                  {product.pictureList.length === 0 ? (
+                    <Image
+                      src={imgFolder + "ReactJS.png"}
+                      width={1000}
+                      fluid
+                    ></Image>
+                  ) : (
+                    product.pictureList.map((picture) => (
+                      <Image src={imgFolder + picture} width={1000} fluid />
+                    ))
+                  )}
+                </Carousel.Item>
               </Carousel>
               <Card.Body>
                 <Card.Title>{formatPrice(product.price)}</Card.Title>
@@ -71,6 +80,15 @@ const ProductCardList = (props: Props) => {
             </Card>
           </Col>
         ))}
+        <Col className="text-center">
+          <Card style={{ height: 360 }}>
+            <Card.Body>
+              <Button variant="secondary" onClick={() => onClickAddProduct}>
+                Add new product
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
     </div>
   );
